@@ -9,13 +9,11 @@
 3. Build the flask container: `docker-compose build`
 
 ## Step 1 : Simple flask app 
-### Spawn the flask app 
 
-Launch the first flask app:
+1. Go in `workshop/part_2`
+2. Launch the first flask app: `docker-compose build && docker-compose up`
 
-`docker-compose up`
-
-Try it out with one of the following command:
+3. Try it out with one of the following command:
 
 * `curl -X GET http://localhost:8080/think/?subject=technology`
 * `curl -X GET http://localhost:8080/think/?subject=religion`
@@ -24,73 +22,11 @@ Try it out with one of the following command:
 * `curl -X GET http://localhost:8080/think/?subject=music`
 * `curl -X GET http://localhost:8080/think/?subject=humankind`
 
-## Step 2 : Implement metric monitoring 
-### Setup
+3. Stop the application when you are over: `docker-compose stop && docker-compose rm`
 
-Stop and remove all containers:
+4. Switch to the branch `part_2/step_2` to start next step:
 
-`docker-compose rm & docker-compose stop`
-
-Add the following line to the `docker-compose.yaml` file to run the agent along side our app:
-
-```
-datadog:
-    container_name: datadog_agent
-    image: datadog/agent:latest
-    environment:
-      - DD_HOSTNAME=workshop_part_2
-      - DD_API_KEY=${DD_API_KEY}
-    volumes:
-      - /proc/:/host/proc/:ro
-      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-```
-
-In order to avoid any launch issue, make sure that the DD agent is the last container to start by adding:
-
-```
-datadog:
-  (...)
-  depends_on:
-        - nginx
-        - api
-```
-
-
-In order to start metrics collection we are going to use labels on our containers ([learn more about auto-discovery in our documentation][5]):
-
-For NGINX, according to [the NGINX documentation][6]:
-
-```
-    label:
-        com.datadoghq.ad.check_names: '["nginx"]'
-        com.datadoghq.ad.init_configs: '[{}]'
-        com.datadoghq.ad.instances: '[{"nginx_status_url": "http://%%host%%:%%port%%/nginx_status"}]'
-```
-
-For Redis, according to [the Redis documentation][7]:
-
-```
-    label:
-        com.datadoghq.ad.check_names: '["redis"]'
-        com.datadoghq.ad.init_configs: '[{}]'
-        com.datadoghq.ad.instances: '[{"host": "%%host%%", "port": "6379"}]'
-```
-
-
-Once done, re-spawn your containers and go back to your [Datadog application][]. 
-
-`docker-compose up`
-
-### Explore in Datadog:
-
-Because of the check name, we can see that there are dashboard already created in your datadog application:
-
-* [Nginx Overview][1]
-* [Nginx Metrics][2]
-* [Redis Overview][3]
-
-We now have a clear state of our system and we could check if there is an issue but let's try to have more insights 
+`git checkout part_2/step_2`
 
 [1]: https://app.datadoghq.com/screen/integration/21/nginx---overview
 [2]: https://app.datadoghq.com/dash/integration/20/nginx---metrics
