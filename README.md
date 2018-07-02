@@ -1,8 +1,8 @@
 # log-workshop
-## Overview 
 
-A simple Flask app to demonstrate Datadog Log management solution
-This is inspired from the [previous work of Vlad][4] on the APM distributed feature.
+This workshop aims to demonstrate the Datadog Log-management solution.
+Part 1 is around how to collect different logs formats from different sources and how to unify them on the datadog side in order to leverage the most value out of it.
+Part 2 is a simple Flask application to demonstrate how Datadog Log management solution include it-self in the 100% observability logic. The Flask app is a fork from the [previous workshop of Vlad][4] on the APM distributed feature.
 
 ## Setup
 

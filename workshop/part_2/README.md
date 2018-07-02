@@ -24,9 +24,7 @@
 
 3. Stop the application when you are over: `docker-compose stop && docker-compose rm`
 
-4. Switch to the branch `part_2/step_2` to start next step:
-
-`git checkout part_2/step_2`
+**[Switch to the branch `part_2/step_2` to start next step: `git checkout part_2/step_2`][11]**
 
 [1]: https://app.datadoghq.com/screen/integration/21/nginx---overview
 [2]: https://app.datadoghq.com/dash/integration/20/nginx---metrics
@@ -37,3 +35,7 @@
 [7]: https://docs.datadoghq.com/integrations/redisdb/
 [8]: https://app.datadoghq.com/
 [9]: https://app.datadoghq.com/logs/pipelines
+[10]: https://app.datadoghq.com/apm/home?env=none
+[11]: https://github.com/l0k0ms/log-workshop/tree/part_2/step_2/workshop/part_2
+[12]: https://github.com/l0k0ms/log-workshop/tree/part_2/step_3/workshop/part_2
+[13]: https://github.com/l0k0ms/log-workshop/tree/part_2/step_4/workshop/part_2
