@@ -161,7 +161,7 @@ Now that all the different source of logs have a unified format, let's create a 
 
 The final pipeline should look like this:
 
-![main_processing_pipeline](/image/main_processing_pipeline.png)
+![main_processing_pipeline](/images/main_processing_pipeline.png)
 
 ## Facets
 
