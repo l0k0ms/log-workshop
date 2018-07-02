@@ -5,13 +5,16 @@ If not done already, [enable the log-management product in your Datadog applicat
 ## Launch the script
 
 1. Go in `/vagrant/workshop/part_1/`
-2. Launch the dummy script: Launch the dummy script: `python main.py &`
+2. Launch the dummy script: `python main.py &`
 
 ## Installing the Agent
 
 1. Connect to your [Datadog Application][2]
 2. Install the Datadog Agent on your machine:
-    `DD_API_KEY=$DD_API_KEY bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"`
+
+    ```
+    DD_API_KEY=$DD_API_KEY bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
+    ```
 
 Once installed you should see this into your shell:
 
@@ -135,9 +138,19 @@ The final pipeline should look like this:
 
 ![json_log_final_pipeline](/workshop/part_1/images/json_log_final_pipeline.png)
 
+and transform this log:
+
+```
+```
+
+into this log:
+
+```
+```
+
 ### UDP log
 
-1. [Clone the Text log pipeline][] and renaming it into the UDP log.
+1. Clone the Text log pipeline and renaming it into the UDP log.
 
 2. Change the pipeline filter value to `service:udp_log` to apply this Pipeline only to UDP logs
 
@@ -151,7 +164,7 @@ Now that all the different source of logs have a unified format, let's create a 
 
 The final pipeline should look like this:
 
-![main_processing_pipeline](/images/main_processing_pipeline.png)
+![main_processing_pipeline](/image/main_processing_pipeline.png)
 
 ## Facets
 
