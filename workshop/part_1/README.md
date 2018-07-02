@@ -135,19 +135,9 @@ The final pipeline should look like this:
 
 ![json_log_final_pipeline](/workshop/part_1/images/json_log_final_pipeline.png)
 
-and transform this log:
-
-```
-```
-
-into this log:
-
-```
-```
-
 ### UDP log
 
-1. Clone the Text log pipeline and renaming it into the UDP log.
+1. [Clone the Text log pipeline][] and renaming it into the UDP log.
 
 2. Change the pipeline filter value to `service:udp_log` to apply this Pipeline only to UDP logs
 
