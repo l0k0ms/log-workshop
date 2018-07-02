@@ -19,11 +19,10 @@ aiohttp_logger.setLevel(logging.DEBUG)
 # Configure Redis
 # This will report a span with the default settings
 redis_client = redis.StrictRedis(host='redis', port=6379)
-patch(redis=True)
-
 
 async def think(subject):
     cached_thought = redis_client.get(subject)
+    
     if cached_thought:
         return pickle.loads(cached_thought)
 
@@ -57,5 +56,4 @@ async def handle(request):
 
 app = web.Application()
 app.router.add_get('/', handle)
-
 web.run_app(app, port=8000)
