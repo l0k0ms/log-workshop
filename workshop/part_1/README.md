@@ -86,7 +86,7 @@ Go into your [log-explorer view][6] and check that your logs are here.
 
 1. [Create a  pipeline][7] to parse full text log **ONLY** (Set-up the correct filter on the pipeline `service:text_log`)
 
-    [text_pipeline](/images/text_pipeline.png)
+    ![text_pipeline](/workshop/part_1/images/text_pipeline.png)
 
 2. Implement a Grok parser in this pipeline: 
 
@@ -94,15 +94,15 @@ Go into your [log-explorer view][6] and check that your logs are here.
     rule %{date("yyyy-MM-dd HH:mm:ss.SSSSSS"):date} %{word:severity} %{word:user} connected to %{notSpace:http.url} it took %{number:http.response_time:scale(0.001)} s and ended up with the %{number:http.status_code} status code user agent used was %{data:http.user_agent}
     ```
 
-    [Text log parser](/images/text_log_grok_parser.png)
+    ![Text log parser](/workshop/part_1/images/text_log_grok_parser.png)
 
 3. Implement a severity remapping on the main log status with [the log status remapper][9]
 
-    [text_log_remapping_severity](/images/text_log_remapping_severity.png)
+    ![text_log_remapping_severity](/workshop/part_1/images/text_log_remapping_severity.png)
 
 The final pipeline should look like this:
 
-[text_log_final_pipeline](/images/text_log_final_pipeline.png)
+![text_log_final_pipeline](/workshop/part_1/images/text_log_final_pipeline.png)
 
 and transform this log:
 
@@ -133,7 +133,7 @@ into this log:
 
 The final pipeline should look like this:
 
-[json_log_final_pipeline](/images/json_log_final_pipeline.png)
+![json_log_final_pipeline](/workshop/part_1/images/json_log_final_pipeline.png)
 
 and transform this log:
 
@@ -161,7 +161,7 @@ Now that all the different source of logs have a unified format, let's create a 
 
 The final pipeline should look like this:
 
-[main_processing_pipeline](/image/main_processing_pipeline.png)
+![main_processing_pipeline](/image/main_processing_pipeline.png)
 
 ## Facets
 

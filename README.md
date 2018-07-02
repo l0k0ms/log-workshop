@@ -19,11 +19,11 @@ You need the following tools for this workshop:
 
 ## Part 1
 
-Go in [/part_1](/part_1) and follow the `README.md` instructions.
+Go in [/part_1](/workshop/part_1) and follow the `README.md` instructions.
 
 ## Part 2
 
-Go in [/part_2](/part_2) and follow the `README.md` instructions.
+Go in [/part_2](/workshop/part_2) and follow the `README.md` instructions.
 
 [1]: https://www.vagrantup.com/downloads.html
 [2]: https://app.datadoghq.com/
