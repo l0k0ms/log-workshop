@@ -116,8 +116,8 @@ into this log:
 {
     "date": 1530522262533,
     "http": {
-        "response_time": 4329
-        "status_code": 503
+        "response_time": 4329,
+        "status_code": 503,
         "url": "http://my.website_1.com/path/number/3/?query=param_1&var=foo_2user_agentMozilla/5.0%2520(X11;%2520Linux%2520x86_64;%2520rv:60.0)%2520Gecko/20100101%2520Firefox/60.0"
     },
     "severity": "EMERGENCY",
