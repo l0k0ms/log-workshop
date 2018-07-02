@@ -29,6 +29,9 @@ services:
       - ./conf.d/redis/redis.conf:/usr/local/etc/redis/redis.conf
     labels:
       com.datadoghq.ad.logs: '[{"source": "redis", "service": "docker-redis"}]'
+      com.datadoghq.ad.check_names: '["redis"]'
+      com.datadoghq.ad.init_configs: '[{}]'
+      com.datadoghq.ad.instances: '[{"host": "%%host%%", "port": "6379"}]'
   
   api:
     container_name: thinker-api
