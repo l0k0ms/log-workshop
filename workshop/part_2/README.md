@@ -27,15 +27,11 @@ Try it out with one of the following command:
 ## Implement metric monitoring 
 ### Setup
 
-Stop the current containers:
+Stop and remove all containers:
 
-`docker-compose stop`
+`docker-compose rm & docker-compose stop`
 
-remove all containers:
-
-`docker-compose rm`
-
-We are going to edit our `docker-compose.yaml` file to run the agent allong side our app:
+Add the following line to the `docker-compose.yaml` file to run the agent along side our app:
 
 ```
 datadog:
@@ -50,18 +46,20 @@ datadog:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 ```
 
-In order to avoid any launch issue, we should make sure that the DD agent is the last container to start by adding:
+In order to avoid any launch issue, make sure that the DD agent is the last container to start by adding:
 
 ```
-depends_on:
-      - nginx
-      - api
+datadog:
+  (...)
+  depends_on:
+        - nginx
+        - api
 ```
 
 
-In order to start metrics collection we are going to use labels:
+In order to start metrics collection we are going to use labels on our containers ([learn more about auto-discovery in our documentation][5]):
 
-For NGINX:
+For NGINX, according to [the NGINX documentation][6]:
 
 ```
     label:
@@ -70,7 +68,7 @@ For NGINX:
         com.datadoghq.ad.instances: '[{"nginx_status_url": "http://%%host%%:%%port%%/nginx_status"}]'
 ```
 
-For Redis:
+For Redis, according to [the Redis documentation][7]:
 
 ```
     label:
@@ -78,6 +76,11 @@ For Redis:
         com.datadoghq.ad.init_configs: '[{}]'
         com.datadoghq.ad.instances: '[{"host": "%%host%%", "port": "6379"}]'
 ```
+
+
+Once done, re-spawn your containers and go back to your [Datadog application][]. 
+
+`docker-compose up`
 
 ### Explore in Datadog:
 
@@ -188,7 +191,7 @@ docker-compose up
 ```
 
 
-You can see the pipelines beeing created and parsing your logs.
+Check if [the integration pipelines][9] are created and are parsing your logs.
 
 ### Binding logs traces and metrics
 
@@ -250,3 +253,8 @@ Let's parse it, add the hits_number as a facet and now add a monitor on its deri
 [2]: https://app.datadoghq.com/dash/integration/20/nginx---metrics
 [3]: https://app.datadoghq.com/screen/integration/15/redis---overview
 [4]: https://docs.datadoghq.com/agent/basic_agent_usage/amazonlinux/#commands
+[5]: https://docs.datadoghq.com/agent/autodiscovery/
+[6]: https://docs.datadoghq.com/integrations/nginx/
+[7]: https://docs.datadoghq.com/integrations/redisdb/
+[8]: https://app.datadoghq.com/
+[9]: https://app.datadoghq.com/logs/pipelines

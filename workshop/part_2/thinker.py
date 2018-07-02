@@ -11,9 +11,6 @@ from ddtrace.contrib.aiohttp import trace_app
 
 from thoughts import thoughts
 
-import logging
-import json_log_formatter
-
 # Logger configuration
 logger = logging.getLogger(__name__)
 

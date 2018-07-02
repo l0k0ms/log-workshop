@@ -4,3 +4,4 @@ workshop/part_1/text_log.log
 .DS_Store
 */**/.DS_Store
 workshop/part_2/__pycache__/*
+workshop/part_2/__pycache__/
