@@ -2,11 +2,11 @@
 
 ## Installation
 
-If the agent from part 1 is still running, stop it with the following command:
+1. If the agent from part 1 is still running, stop it with the [following command][4]: `sudo service datadog-agent stop`
 
-Then build the flask container:
+2. Go in `/vagrant/workshop/part_2/`
 
-`docker-compose build`
+3. Build the flask container: `docker-compose build`
 
 ## Simple flask app 
 ### Spawn the flask app 
@@ -15,14 +15,14 @@ Launch the first flask app:
 
 `docker-compose up`
 
-Try it out with the following command:
+Try it out with one of the following command:
 
 * `curl -X GET http://localhost:8080/think/?subject=technology`
 * `curl -X GET http://localhost:8080/think/?subject=religion`
 * `curl -X GET http://localhost:8080/think/?subject=war`
 * `curl -X GET http://localhost:8080/think/?subject=work`
 * `curl -X GET http://localhost:8080/think/?subject=music`
-* `curl -X GET http://localhost:8080/think/?subject=mankind` #humankind
+* `curl -X GET http://localhost:8080/think/?subject=humankind`
 
 ## Implement metric monitoring 
 ### Setup
@@ -249,3 +249,4 @@ Let's parse it, add the hits_number as a facet and now add a monitor on its deri
 [1]: https://app.datadoghq.com/screen/integration/21/nginx---overview
 [2]: https://app.datadoghq.com/dash/integration/20/nginx---metrics
 [3]: https://app.datadoghq.com/screen/integration/15/redis---overview
+[4]: https://docs.datadoghq.com/agent/basic_agent_usage/amazonlinux/#commands

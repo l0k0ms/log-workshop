@@ -26,7 +26,7 @@ thoughts = {
         quote='Ah, music. A magic beyond all we do here!',
         author='J. K. Rowling',
     ),
-    'mankind': Thought(
+    'humankind': Thought(
         quote='I think that God in creating Man somewhat overestimated his ability.',
         author='Oscar Wilde',
     ),

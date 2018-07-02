@@ -26,7 +26,7 @@ services:
         - "6379:6379"
     command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ./conf.d/redis/redis.conf:/usr/local/etc/redis/redis.conf
     labels:
       com.datadoghq.ad.logs: '[{"source": "redis", "service": "docker-redis"}]'
   
@@ -64,7 +64,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./conf.d:/etc/nginx/conf.d
+      - ./conf.d/nginx/:/etc/nginx/conf.d
     depends_on:
       - api
     labels:

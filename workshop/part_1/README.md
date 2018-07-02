@@ -187,9 +187,9 @@ Looking at raw logs like this can be useful, but if you want to make your log ta
 
 Try to display:
 
-*  The top `url`
-*  The top `url` according to the duration
-*  The top `url` from `john` with a `4xx` or `5xx` status code
+*  The top `http.url`
+*  The top `http.url` according to the duration
+*  The top `http.url` from `user:john` with a `4xx` or `5xx` status code
 
 ## Monitor
 

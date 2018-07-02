@@ -3,3 +3,4 @@ workshop/part_1/text_log.log
 .vagrant/*
 .DS_Store
 */**/.DS_Store
+workshop/part_2/__pycache__/*
