@@ -8,7 +8,7 @@
 
 3. Build the flask container: `docker-compose build`
 
-## Simple flask app 
+## Step 1 : Simple flask app 
 ### Spawn the flask app 
 
 Launch the first flask app:
@@ -24,7 +24,7 @@ Try it out with one of the following command:
 * `curl -X GET http://localhost:8080/think/?subject=music`
 * `curl -X GET http://localhost:8080/think/?subject=humankind`
 
-## Implement metric monitoring 
+## Step 2 : Implement metric monitoring 
 ### Setup
 
 Stop and remove all containers:
@@ -92,7 +92,7 @@ Because of the check name, we can see that there are dashboard already created i
 
 We now have a clear state of our system and we could check if there is an issue but let's try to have more insights 
 
-### Implement Trace monitoring 
+## Step 3: Implement Trace monitoring 
 
 Let's switch to the branch `app-with-tracing` we now have our app that is instrumented with traces.
 
@@ -120,7 +120,7 @@ If we go back to our Datadog application we can now start to see some traces flo
 
 It's great we now understand the behaviour of our request but it's not enough
 
-### Implement log monitoring
+## Step 4: Implement log monitoring
 
 ### Basic log collection
 
@@ -224,7 +224,7 @@ docker-compose rm
 docker-compose up
 ```
 
-### Adding new logs
+## (Bonus) Adding new logs
 
 Our log collection and binding is now over, let's update our app with a new log and see what is happening
 
