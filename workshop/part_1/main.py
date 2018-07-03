@@ -46,16 +46,17 @@ def random_value(array):
 
 def write_text_log(filename):
 	now = datetime.datetime.now()
+	response_time_s = str(randint(0,10000)*1000)
+	log = str(now) + ' ' + random_value(severity) + ' ' + random_value(user) \
+	+ ' connected to ' + random_value(url) \
+	+ ' it took ' + response_time_s \
+	+ ' s and ended up with the ' + random_value(status_code) + ' status code' \
+	+ ' user agent used was ' + random_value(user_agent) + '\n'
 	with open(filename, 'a') as f:
-			response_time_s = str(randint(0,10000)*1000)
-			log = str(now) + ' ' + random_value(severity) + ' ' + random_value(user) \
-			+ ' connected to ' + random_value(url) \
-			+ ' it took ' + response_time_s \
-			+ ' s and ended up with the ' + random_value(status_code) + ' status code' \
-			+ ' user agent used was ' + random_value(user_agent)
-
 			#print('writing into the text_log file')
 			f.write(log +'\n')
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	sock.sendto(log, (UDP_IP, UDP_PORT))
 
 def write_json_log(filename):
 	now = datetime.datetime.now()
@@ -72,24 +73,16 @@ def write_json_log(filename):
 			"user_agent_bis": "{}".format(random_value(user_agent))}
 			#print('Writing into the json_log file')
 			f.write(json.dumps(log) +'\n')
-
-def write_udp_syslog_log(ip,port):
-	now = datetime.datetime.now()
-	response_time_s = str(randint(0,10000)*1000)
-	#print('Writing into the udp port')
-	log = str(now) + ' ' + random_value(severity) + ' ' + random_value(user) \
-			+ ' connected to ' + random_value(url) \
-			+ ' it took ' + response_time_s \
-			+ ' s and ended up with the ' + random_value(status_code) + ' status code' \
-			+ ' user agent used was ' + random_value(user_agent) + '\n'
-	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	sock.sendto(log, (ip, port))
+	
 		
 def dummy():
+	print('Dummy script started\n')
+	print('text_log.log file path is /vagrant/workshop/part_1/text_log.log')
+	print('json_log.log file path is /vagrant/workshop/part_1/json_log.log')
+	print('UDP log are sent on the 4242 port through UDP')
 	while(1):
 		write_text_log('./text_log.log')
 		write_json_log('./json_log.log')
-		write_udp_syslog_log(UDP_IP,UDP_PORT)
 		time.sleep(3)
 
 if __name__ == '__main__':
