@@ -1,5 +1,24 @@
 version: '3'
 services:
+  datadog:
+    container_name: datadog_agent
+    image: datadog/agent:latest
+    environment:
+      - DD_HOSTNAME=workshop_part_2
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+    volumes:
+      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
+      - /proc/mounts:/host/proc/mounts:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - nginx
+      - api
+  
   redis:
     image: redis:latest
     container_name: docker-redis
@@ -8,6 +27,11 @@ services:
     command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
       - ./conf.d/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "redis", "service": "docker-redis"}]'
+      com.datadoghq.ad.check_names: '["redis"]'
+      com.datadoghq.ad.init_configs: '[{}]'
+      com.datadoghq.ad.instances: '[{"host": "%%host%%", "port": "6379"}]'
   
   api:
     container_name: thinker-api
@@ -19,6 +43,8 @@ services:
       - .:/usr/src/app/
     depends_on:
       - thinker
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-api"}]'
 
   thinker:
     container_name: thinker-microservice
@@ -32,6 +58,8 @@ services:
       - redis
     ports:
       - "5001:8000"
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-microservice"}]'
 
   nginx:
     image: "nginx:latest"
@@ -42,3 +70,8 @@ services:
       - ./conf.d/nginx/:/etc/nginx/conf.d
     depends_on:
       - api
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "nginx", "service": "docker-nginx"}]'
+      com.datadoghq.ad.check_names: '["nginx"]'
+      com.datadoghq.ad.init_configs: '[{}]'
+      com.datadoghq.ad.instances: '[{"nginx_status_url": "http://%%host%%:%%port%%/nginx_status"}]'
