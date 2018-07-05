@@ -4,14 +4,13 @@ services:
     container_name: datadog_agent
     image: datadog/agent:latest
     environment:
-      - DD_HOSTNAME=workshop_part_2
+      - DD_HOSTNAME=datadog
       - DD_API_KEY=${DD_API_KEY}
       - DD_APM_ENABLED=true
       - DD_LOGS_ENABLED=true
       - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
     volumes:
       - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
-      - /proc/mounts:/host/proc/mounts:ro
       - /proc/:/host/proc/:ro
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro

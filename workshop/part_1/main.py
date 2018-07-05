@@ -54,9 +54,9 @@ def write_text_log(filename):
 	+ ' user agent used was ' + random_value(user_agent) + '\n'
 	with open(filename, 'a') as f:
 			#print('writing into the text_log file')
-			f.write(log +'\n')
+			f.write(log )
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	sock.sendto(log, (UDP_IP, UDP_PORT))
+	sock.sendto(log +'\n', (UDP_IP, UDP_PORT))
 
 def write_json_log(filename):
 	now = datetime.datetime.now()

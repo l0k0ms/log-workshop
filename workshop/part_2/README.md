@@ -25,8 +25,6 @@
 
 3. Stop the application when you are over: `docker-compose stop && docker-compose rm`
 
-**[Switch to the branch `part_2/step_2` to start next step: `git checkout part_2/step_2`][11]**
-
 ## Step 2 : Implement metric monitoring 
 ### Setup
 
@@ -34,12 +32,12 @@
 
 2. Add the following lines to the `docker-compose.yaml` file to run the agent along side our application ([learn more on docker Datadog Agent setup in the documentation][15]):
 
-```
+```yaml
 datadog:
     container_name: datadog_agent
     image: datadog/agent:latest
     environment:
-      - DD_HOSTNAME=workshop_part_2
+      - DD_HOSTNAME=datadog
       - DD_API_KEY=${DD_API_KEY}
     volumes:
       - /proc/:/host/proc/:ro
@@ -47,7 +45,7 @@ datadog:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 ```
 
-In order to avoid any launch issue, make sure that the DD agent is the last container to start by adding:
+In order to avoid any launch issue, make sure that the Datadog Agent is the last container to start by adding:
 
 ```
 datadog:
@@ -95,62 +93,46 @@ Because of the check name that was just set up, Integration dashboard are create
 
 They give you a clear state of the running system  but don't show its behavior nor why it's behaving this way/
 
-**[Switch to the branch `part_2/step_3` to start next step: `git checkout part_2/step_3`][12]**
-
 ## Step 3: Implement Trace monitoring 
 
-If not done already, switch to the branch `part_2/step_3` for this section.
-This branch has already the tracing implemented in the Flask application.
-
-Now let's configure the Datadog agent to gather traces in addition of metrics already collected and send everything to Datadog:
+The flask application is already instrumented with traces. To configure the Datadog agent to gather traces in addition of metrics already collected and send everything to Datadog:
 
 1. Add the following environment variable to our `datadog` container:
 
 ```
 datadog:
   environment:
-    (..)
+    (...)
     - DD_APM_ENABLED=true
 ```
 
 2. Start the application:
 
 ```
-docker-compose build && docker-compose up
+docker-compose up
 ```
 
-3. Go back to the [Datadog application][10] to start to see some traces flowing in it for the `redis`, `thinker-api`, `thinker-microservice` service.
-
-**[Switch to the branch `part_2/step_4` to start next step: `git checkout part_2/step_4`][13]**
+3. Go back to the [Datadog application][10] to see some traces flowing in it for the `redis`, `thinker-api`, `thinker-microservice` service.
 
 ## Step 4: Implement log monitoring
 ### Basic log collection
 
-Metrics and traces are now collected but let's collect the last medium.
+Metrics and traces are neow collected but let's collect the last medium.
 
 The application is already emitting some logs let's catch them with our datadog container:
 
-Use the following configuration in your `docker-compose.yml` for the Datadog Agent in-order to gather metrics, traces, and logs with it:
+Add the following configuration in your `docker-compose.yml` for the Datadog Agent in-order to gather logs from your application:
 
 ```
 datadog:
-    container_name: datadog_agent
-    image: datadog/agent:latest
-    environment:
-      - DD_HOSTNAME=workshop_part_2
-      - DD_API_KEY=${DD_API_KEY}
-      - DD_APM_ENABLED=true
-      - DD_LOGS_ENABLED=true
-      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
-    volumes:
-      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
-      - /proc/mounts:/host/proc/mounts:ro
-      - /proc/:/host/proc/:ro
-      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    depends_on:
-      - nginx
-      - api
+  environment:
+    (...)
+    - DD_LOGS_ENABLED=true
+    - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+  volume:
+    (...)
+    - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
+    - /proc/mounts:/host/proc/mounts:ro
 ```
 
 [Refer to the Datadog Agent log collection documentation to learn more][16]. 
@@ -174,15 +156,15 @@ Enhance your docker compose with the following labels
 
 ```
 redis:
+  (...)
+  labels:
     (...)
-    labels:
-        (...)
-        com.datadoghq.ad.logs: '[{"source": "redis", "service": "docker-redis"}]'
+    com.datadoghq.ad.logs: '[{"source": "redis", "service": "docker-redis"}]'
 nginx:
+  (...)
+  label:
     (...)
-    label:
-        (...)
-        com.datadoghq.ad.logs: '[{"source": "nginx", "service": "docker-nginx"}]'
+    com.datadoghq.ad.logs: '[{"source": "nginx", "service": "docker-nginx"}]'
 ```
 
 restart everything and watch what is happening:
@@ -203,17 +185,16 @@ Enhance the `docker-compose.yml` file with the following labels:
 
 ```
 api:
-    (...) 
-    labels:
-        (...)
-        com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-api"}]'
+  (...)
+  labels:
+    (...)
+    com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-api"}]'
 
 thinker:
+  (...)
+  labels:
     (...)
-    labels:
-        (...)
-        labels:
-      com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-microservice"}]'
+    com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-microservice"}]'
 ```
 
 Restart everything and watch what is happening:
@@ -255,9 +236,6 @@ Final question parse this new log, add the `hits_number` as a facet, create a mo
 [8]: https://app.datadoghq.com/
 [9]: https://app.datadoghq.com/logs/pipelines
 [10]: https://app.datadoghq.com/apm/home?env=none
-[11]: https://github.com/l0k0ms/log-workshop/tree/part_2/step_2/workshop/part_2
-[12]: https://github.com/l0k0ms/log-workshop/tree/part_2/step_3/workshop/part_2
-[13]: https://github.com/l0k0ms/log-workshop/tree/part_2/step_4/workshop/part_2
 [14]: https://app.datadoghq.com/account/settings#api
 [15]: https://docs.datadoghq.com/agent/basic_agent_usage/docker/
 [16]: https://docs.datadoghq.com/logs/log_collection/docker/

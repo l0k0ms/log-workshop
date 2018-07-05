@@ -5,7 +5,7 @@
 
 sudo apt-get update
 
-sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+sudo apt-get --assume-yes  install apt-transport-https ca-certificates curl software-properties-common
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
@@ -19,7 +19,7 @@ sudo apt-get --assume-yes install docker-ce
 #Installing docker compose #
 ############################
 
-sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose  > /dev/null
+sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
 ##############################################
@@ -27,7 +27,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 ##############################################
 sudo service docker start
 
-sudo apt-get install apache2
+sudo apt-get --assume-yes install apache2
 
 ################################
 # Giving the right permissions #
