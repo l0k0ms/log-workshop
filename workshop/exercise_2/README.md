@@ -1,13 +1,40 @@
-# Workshop part 1
+# Workshop Exercise 2: Implementing logging best practices
+
+The second exercise is made upon a dummy application that generates different logs with different formats. It logs them in different sources (file, UDP)
 
 If not done already, [enable the log-management product in your Datadog application][6].
 
 ## Launch the script
 
-1. Go in `/vagrant/workshop/part_1/`
-2. Launch the dummy script: `python main.py &`
+In order to perform this exercise we must spawn a vagrant VM, it allows us to work in a controlled environment, abstracting all potential OS related issue and making this work flow repeatable.
+
+The OS distribution and version used for this exercise is `bento/ubuntu-16.04`. 
+
+1. Start your vagrant VM:
+  
+  `vagrant up`
+
+2. Connect to your Workshop vagrant box:
+  
+  `vagrant ssh`
+
+3. Export your [Datadog API Key](https://app.datadoghq.com/account/settings#api):
+
+   `export DD_API_KEY=<DD_API_KEY>`
+
+   We export the Datadog API key in our current shell in order to be able to call it at any time with `$DD_API_KEY`. 
+
+4. Go in the `/vagrant/workshop/exercise_2/` folder to start the exercise:
+
+  `cd ~/vagrant/workshop/exercise_2/`
+
+5. Launch the dummy script: 
+
+    `python main.py &`
 
 ## Installing the Agent
+
+To start gathering logs from our system we can use any log-shipper, but in order to benefit from the advantages displayed in the exercise 1 of this workshop we strongly advise you to use the Datadog Agent. To get the Datadog agent:
 
 1. Connect to your [Datadog Application][2]
 2. Install the Datadog Agent on your machine:
@@ -31,6 +58,8 @@ And to run it again run:
     sudo systemctl start datadog-agent
 ```
 
+This means that the Datadog agent is up and running and is ready to be configured.
+
 ## Gathering Data
 
 We have 3 types of log: **full text** | **JSON** | **UDP**, we need to configure our agent accordingly ([Log collection documentation][5])
@@ -45,32 +74,32 @@ To do:
 logs:
 
   - type: file
-    path: /vagrant/workshop/part_1/text_log.log
+    path: /vagrant/workshop/exercise_2/text_log.log
     service: text_log
     source: dummy_app
     sourcecategory: custom
-    tags: workshop:part_1, type:text_log
+    tags: workshop:exercise_2, type:text_log
 
   - type: file
-    path: /vagrant/workshop/part_1/json_log.log
+    path: /vagrant/workshop/exercise_2/json_log.log
     service: json_log
     source: dummy_app
     sourcecategory: custom
-    tags: workshop:part_1, type:json_log
+    tags: workshop:exercise_2, type:json_log
 
   - type: file
     path: /var/log/datadog/*.log
     service: datadog-agent
     source: syslog
     sourcecategory: agent
-    tags: workshop:part_1, type:datadog-agent
+    tags: workshop:exercise_2, type:datadog-agent
 
   - type: udp
     port: 4242
     service: udp_log
     source: dummy_app
     sourcecategory: custom
-    tags: workshop:part_1, type:udp_log
+    tags: workshop:exercise_2, type:udp_log
 ```
 
 * Give access to the folder to the DD agent `sudo chown -R dd-agent:dd-agent /var/log/datadog`.
@@ -89,7 +118,7 @@ Go into your [log-explorer view][6] and check that your logs are here.
 
 1. [Create a  pipeline][7] to parse full text log **ONLY** (Set-up the correct filter on the pipeline `service:text_log`)
 
-    ![text_pipeline](/workshop/part_1/images/text_pipeline.png)
+    ![text_pipeline](/workshop/exercise_2/images/text_pipeline.png)
 
 2. Implement a Grok parser in this pipeline: 
 
@@ -97,15 +126,15 @@ Go into your [log-explorer view][6] and check that your logs are here.
     rule %{date("yyyy-MM-dd HH:mm:ss.SSSSSS"):date} %{word:severity} %{word:user} connected to %{notSpace:http.url} it took %{number:http.response_time:scale(0.001)} s and ended up with the %{number:http.status_code} status code user agent used was %{data:http.user_agent}
     ```
 
-    ![Text log parser](/workshop/part_1/images/text_log_grok_parser.png)
+    ![Text log parser](/workshop/exercise_2/images/text_log_grok_parser.png)
 
 3. Implement a severity remapping on the main log status with [the log status remapper][9]
 
-    ![text_log_remapping_severity](/workshop/part_1/images/text_log_remapping_severity.png)
+    ![text_log_remapping_severity](/workshop/exercise_2/images/text_log_remapping_severity.png)
 
 The final pipeline should look like this:
 
-![text_log_final_pipeline](/workshop/part_1/images/text_log_final_pipeline.png)
+![text_log_final_pipeline](/workshop/exercise_2/images/text_log_final_pipeline.png)
 
 and transform this log:
 
@@ -136,16 +165,18 @@ into this log:
 
 The final pipeline should look like this:
 
-![json_log_final_pipeline](/workshop/part_1/images/json_log_final_pipeline.png)
+![json_log_final_pipeline](/workshop/exercise_2/images/json_log_final_pipeline.png)
 
 and transform this log:
 
 ```
+
 ```
 
 into this log:
 
 ```
+
 ```
 
 ### UDP log

@@ -77,8 +77,8 @@ def write_json_log(filename):
 		
 def dummy():
 	print('Dummy script started\n')
-	print('text_log.log file path is /vagrant/workshop/part_1/text_log.log')
-	print('json_log.log file path is /vagrant/workshop/part_1/json_log.log')
+	print('text_log.log file path is /vagrant/workshop/exercise_2/text_log.log')
+	print('json_log.log file path is /vagrant/workshop/exercise_2/json_log.log')
 	print('UDP log are sent on the 4242 port through UDP')
 	while(1):
 		write_text_log('./text_log.log')
