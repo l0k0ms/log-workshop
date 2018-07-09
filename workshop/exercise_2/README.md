@@ -188,7 +188,7 @@ into this log:
 ### Main processing pipeline 
 The current pipelines should look like this:
 
-![3_pipelines](/workshop/images/exervice_2/3_pipelines.png)
+![3_pipelines](/workshop/exercise_2/images/3_pipelines.png)
 
 Now that all the different source of logs have a unified format, let's create a main processing pipeline to enhance all our logs:
 
@@ -206,11 +206,11 @@ Now that all the different source of logs have a unified format, let's create a 
 
 4. Create an attribute categories on the status code [with the categories processor][13]
 
-![category processor](/workshop/exervice_2/images/category_processor.png)
+![category processor](/workshop/exercise_2/images/category_processor.png)
 
 The final pipeline should look like this:
 
-![main_processing_pipeline](/workshop/exervice_2/images/main_processing_pipeline.png)
+![main_processing_pipeline](/workshop/exercise_2/images/main_processing_pipeline.png)
 
 ## Facets
 
