@@ -193,13 +193,16 @@ The current pipelines should look like this:
 Now that all the different source of logs have a unified format, let's create a main processing pipeline to enhance all our logs:
 
 1. Create the pipeline:
+    
     ![main pipeline configuration](/workshop/imagesmain_pipeline_conf.png)
 
 2. Parse the `http.url` attribute with the [URL processor][11]
+    
     ![url parser](/workshop/exervice_2/images/url_parser.png)
 
 3. Parse the `http.user_agent` attribute with [User Agent Processor][12]
-    ![user_agent parser](/workshop/exervice_2/images/user_agent_parser.png)
+    
+    ![user_agent parser](/workshop/exercise_2/images/user_agent_parser.png)
 
 4. Create an attribute categories on the status code [with the categories processor][13]
 
@@ -218,9 +221,11 @@ Now that we have all our logs parsed and enhanced we can start adding our attrib
 Add the `user`, `duration`, and `http.url` attributes as facet.
 
 1. Click on the attribute you want to define as a facet:
-    ![creating facet](/workshop/exervice_2/images/creating_facet.png)
+   
+     ![creating facet](/workshop/exervice_2/images/creating_facet.png)
 
 2. Configure your Facet:
+    
     ![configuring facet](/workshop/exervice_2/images/configuring_facet.png)
 
 Facet can be used to filter, either on the string value or on a double/int range.
