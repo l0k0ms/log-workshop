@@ -188,13 +188,13 @@ into this log:
 ### Main processing pipeline 
 The current pipelines should look like this:
 
-![3_pipelines](/workshop/exervice_2/images/3_pipelines.png)
+![3_pipelines](/workshop/images/exervice_2/3_pipelines.png)
 
 Now that all the different source of logs have a unified format, let's create a main processing pipeline to enhance all our logs:
 
 1. Create the pipeline:
     
-    ![main pipeline configuration](/workshop/imagesmain_pipeline_conf.png)
+    ![main pipeline configuration](/workshop/exercise_2/images/main_pipeline_conf.png)
 
 2. Parse the `http.url` attribute with the [URL processor][11]
     
