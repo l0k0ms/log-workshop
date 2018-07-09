@@ -1,0 +1,73 @@
+version: '3'
+services:
+  datadog:
+    container_name: datadog_agent
+    image: datadog/agent:latest
+    environment:
+      - DD_HOSTNAME=datadog
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+    volumes:
+      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - nginx
+      - api
+  
+  api:
+    container_name: thinker-api
+    build: ./app/.
+    environment:
+      - FLASK_APP=api.py
+    command: flask run --host=0.0.0.0
+    volumes:
+      - ./app:/usr/src/app/
+    depends_on:
+      - thinker
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-api"}]'
+
+  thinker:
+    container_name: thinker-microservice
+    build: ./app/.
+    environment:
+      - FLASK_APP=api.py
+    command: python thinker.py
+    volumes:
+      - ./app:/usr/src/app/
+    depends_on:
+      - redis
+    ports:
+      - "5001:8000"
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-microservice", "log_processing_rules": [{"type": "multi_line", "name": "strack_trace_handler", "pattern": "(^([0–9]{1,3}.){3}.([0–9]{1,3})|Error handling request)"}]}]'
+
+  redis:
+    image: redis:latest
+    container_name: docker-redis
+    ports:
+        - "6379:6379"
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./conf.d/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "redis", "service": "redis"}]'
+
+  nginx:
+    image: "nginx:latest"
+    container_name: docker-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./conf.d/nginx/:/etc/nginx/conf.d
+    depends_on:
+      - api
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "nginx", "service": "nginx"}]'
+      com.datadoghq.ad.check_names: '["nginx"]'
+      com.datadoghq.ad.init_configs: '[{}]'
+      com.datadoghq.ad.instances: '[{"nginx_status_url": "http://%%host%%:%%port%%/nginx_status"}]'

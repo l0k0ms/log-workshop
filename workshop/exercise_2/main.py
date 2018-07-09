@@ -53,7 +53,6 @@ def write_text_log(filename):
 	+ ' s and ended up with the ' + random_value(status_code) + ' status code' \
 	+ ' user agent used was ' + random_value(user_agent) + '\n'
 	with open(filename, 'a') as f:
-			#print('writing into the text_log file')
 			f.write(log )
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	sock.sendto(log +'\n', (UDP_IP, UDP_PORT))
@@ -71,7 +70,6 @@ def write_json_log(filename):
 			"message": "A user connected to a URL",
 			"status_code": "{}" .format(random_value(status_code)),
 			"user_agent_bis": "{}".format(random_value(user_agent))}
-			#print('Writing into the json_log file')
 			f.write(json.dumps(log) +'\n')
 	
 		
