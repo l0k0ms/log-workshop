@@ -186,16 +186,28 @@ into this log:
 2. Change the pipeline filter value to `service:udp_log` to apply this Pipeline only to UDP logs
 
 ### Main processing pipeline 
+The current pipelines should look like this:
+
+![3_pipelines](/workshop/exervice_2/images/3_pipelines.png)
 
 Now that all the different source of logs have a unified format, let's create a main processing pipeline to enhance all our logs:
-1. Create 
-1. Parse the `http.url` attribute with the [URL processor][11]
-2. Parse the `http.user_agent` attribute with [User Agent Processor][12]
-3. Create an attribute categories on the status code [with the categories processor][13]
+
+1. Create the pipeline:
+    ![main pipeline configuration](/workshop/imagesmain_pipeline_conf.png)
+
+2. Parse the `http.url` attribute with the [URL processor][11]
+    ![url parser](/workshop/exervice_2/images/url_parser.png)
+
+3. Parse the `http.user_agent` attribute with [User Agent Processor][12]
+    ![user_agent parser](/workshop/exervice_2/images/user_agent_parser.png)
+
+4. Create an attribute categories on the status code [with the categories processor][13]
+
+    ![category processor](/workshop/exervice_2/images/category_processor.png)
 
 The final pipeline should look like this:
 
-![main_processing_pipeline](/images/main_processing_pipeline.png)
+![main_processing_pipeline](/workshop/exervice_2/images/main_processing_pipeline.png)
 
 ## Facets
 
@@ -205,7 +217,13 @@ Now that we have all our logs parsed and enhanced we can start adding our attrib
 
 Add the `user`, `duration`, and `http.url` attributes as facet.
 
-Facet can be used to filter, either on the string value or on a double/int range
+1. Click on the attribute you want to define as a facet:
+    ![creating facet](/workshop/exervice_2/images/creating_facet.png)
+
+2. Configure your Facet:
+    ![configuring facet](/workshop/exervice_2/images/configuring_facet.png)
+
+Facet can be used to filter, either on the string value or on a double/int range.
 
 ## Search 
 
@@ -213,7 +231,11 @@ Here are different search to try out:
 
 1. Search for all logs with `status_code` above 400
 
-2. Find all log for `John`
+    `@http.status_code:>400`
+
+2. Find all log from the user `John`
+
+    `@user_name:"john"`
  
 ## Log Graph
 

@@ -10,21 +10,21 @@ The OS distribution and version used for this exercise is `bento/ubuntu-16.04`.
 
 1. Start your vagrant VM:
   
-  `vagrant up`
+    `vagrant up`
 
 2. Connect to your Workshop vagrant box:
   
-  `vagrant ssh`
+    `vagrant ssh`
 
 3. Export your [Datadog API Key](https://app.datadoghq.com/account/settings#api):
 
-   `export DD_API_KEY=<DD_API_KEY>`
+  `export DD_API_KEY=<DD_API_KEY>`
 
    We export the Datadog API key in our current shell in order to be able to call it at any time with `$DD_API_KEY`. 
 
 4. Go in the `/vagrant/workshop/exercise_2/` folder to start the exercise:
 
-  `cd ~/vagrant/workshop/exercise_2/`
+    `cd ~/vagrant/workshop/exercise_2/`
 
 ## Trying the application
 
@@ -33,7 +33,7 @@ The whole application is managed with `docker-compose` in order to simplify its 
 
 1. Launch the first flask application: 
 
-  `docker-compose build && docker-compose up`
+    `docker-compose build && docker-compose up`
 
 2. Try it out with one of the following command:
 
@@ -57,7 +57,7 @@ If not done already go in your Datadog application and [enable the Log-managemen
 
 Start by stopping and removing all current running containers: 
 
-    `docker-compose stop & docker-compose rm`
+    docker-compose stop & docker-compose rm
 
 Since we are working in a containerized environment, the Datadog agent should be run as a container alongside the other containers. All configuration should then happen only through environment variables, volumes and docker labels.[learn more on docker Datadog Agent setup in the documentation](https://docs.datadoghq.com/agent/basic_agent_usage/docker/).
 
@@ -85,6 +85,8 @@ datadog:
 [Refer to the Datadog Agent log collection documentation to learn more](https://docs.datadoghq.com/logs/log_collection/docker/). 
 
 Go in your Datadog application in [`Log -> Explorer`](https://app.datadoghq.com/logs/) and check your logs flowing.
+
+![Log Flow](/workshop/exercise_1/images/log_flow.png)
 
 ## Step 2: Exploring data in Datadog
 ### Metrics
@@ -117,6 +119,8 @@ Logs are collected from all your containers but there are several issue:
 * Logs are not binded to the other medium that are metrics and traces.
 
 **Those Logs give more context upon your system but don't show its overall state nor it's behavior**
+
+![log_not_parsed](/workshop/exercise_1/log_not_parsed.png)
 
 ## Step 2: Gathering better logs.
 
@@ -177,12 +181,10 @@ thinker:
     com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-microservice"}]'
 ```
 
-
 The `service` attribute values are defined upon what has been set-up in our applications code:
 
-/////////// TO DO \\\\\\\\\\ 
-Add link to tracer set up.
-/////////// TO DO \\\\\\\\\\ 
+* [For the `api` service](https://github.com/l0k0ms/log-workshop/blob/master/workshop/exercise_1/app/api.py#L16)
+* [For the `thinker` service](https://github.com/l0k0ms/log-workshop/blob/master/workshop/exercise_1/app/thinker.py#L73) 
 
 ### Testing the new configuration
 
@@ -195,7 +197,9 @@ docker-compose stop && docker-compose rm && docker-compose up
 Thanks to the `source` attribute [Integration pipelines](https://app.datadoghq.com/logs/pipelines) have been created within your Datadog application and are parsing your application logs from Redis and NGINX.
 If you want to learn more about log-parsing and what's the story behind pipeline feel free to refer to the [second exercise of this workshop][/workshop/exercise_2].
 
-Thanks to the `service` attribute we are now able to switch from metrics to traces to logs with one call to action everytime.
+![integration_pipelines](/workshop/exercise_1/integration_pipelines.png)
+
+Thanks to the `service` attribute we are now able to switch from metrics to traces to logs with.
 
 ## Step 3 - Bonus Enhancing our logs
 
@@ -206,8 +210,8 @@ Update the application with a new log and see what is happening
 In `thinker.py` in the `think()` function add a dummy log: 
 
 ```
-    redis_client.incr('hits')
-    aiohttp_logger.info('Number of hits is {}' .format(redis_client.get('hits').decode('utf-8')))
+redis_client.incr('hits')
+aiohttp_logger.info('Number of hits is {}' .format(redis_client.get('hits').decode('utf-8')))
 ```
 
 It just count the amount of hits and store the number in Redis itself
