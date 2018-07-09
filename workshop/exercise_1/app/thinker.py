@@ -30,10 +30,11 @@ patch(redis=True)
 
 @tracer.wrap(name='think')
 async def think(subject):
-    #redis_client.incr('hits')
-    #aiohttp_logger.info('Number of hits is {}' .format(redis_client.get('hits').decode('utf-8')))
+    redis_client.incr('hits')
+    aiohttp_logger.info('Number of hits is {}' .format(redis_client.get('hits').decode('utf-8')))
     tracer.current_span().set_tag('subject', subject)
     cached_thought = redis_client.get(subject)
+    
     if cached_thought:
         return pickle.loads(cached_thought)
 
@@ -49,6 +50,7 @@ async def handle(request):
     response = {}
     
     for subject in request.query.getall('subject', []):
+        
         try:
             thought = await think(subject)
             response[subject] = {
