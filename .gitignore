@@ -3,5 +3,4 @@ workshop/exercise_2/text_log.log
 .vagrant/*
 .DS_Store
 */**/.DS_Store
-workshop/exercise_1/__pycache__/*
-workshop/exercise_1/__pycache__/
+workshop/exercise_1/app/__pycache__/*

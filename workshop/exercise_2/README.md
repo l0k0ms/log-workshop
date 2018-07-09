@@ -66,7 +66,7 @@ We have 3 types of log: **full text** | **JSON** | **UDP**, we need to configure
 
 To do:
 
-* Enable log collection in `/etc/datadog-agent/datadog.yaml` by setting `logs_enabled: true`
+* Enable log collection in `/etc/datadog-agent/datadog.yaml` by setting: `logs_enabled: true`
 
 * Create a file `workshop.d/conf.yaml` in the ` /etc/datadog-agent/conf.d/` folder with the following content:
 
@@ -101,6 +101,8 @@ logs:
     sourcecategory: custom
     tags: workshop:exercise_2, type:udp_log
 ```
+
+![log configuration](/workshop/exercise_2/images/log_configuration.png)
 
 * Give access to the folder to the DD agent `sudo chown -R dd-agent:dd-agent /var/log/datadog`.
  

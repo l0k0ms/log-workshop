@@ -201,10 +201,13 @@ If you want to learn more about log-parsing and what's the story behind pipeline
 
 Thanks to the `service` attribute we are now able to switch from metrics to traces to logs with.
 
-## Step 3 - Bonus Enhancing our logs
-
+## Bonus - Enhancing our logs
 This section should be done after completing the [second exercise](/workshop/exercise_2) of this workshop.
 
+## Enhancing NGINX logs
+
+
+## Adding new application logs
 Update the application with a new log and see what is happening
 
 In `thinker.py` in the `think()` function add a dummy log: 
