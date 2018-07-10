@@ -13,6 +13,8 @@ You must have the following tools for this workshop:
 * The [Datadog APM feature enabled][9]
 * The [Datadog Log-management feature enabled][8]
 
+Clone this repository on your local computer and you are ready to go !
+
 ## Reaching 100% visibility with metrics traces and logs
 
 Go in [workshop/exercise_1](/workshop/exercise_1) and follow the `README.md` instructions.

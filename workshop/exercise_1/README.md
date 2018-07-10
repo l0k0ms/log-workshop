@@ -22,9 +22,9 @@ The OS distribution and version used for this exercise is `bento/ubuntu-16.04`.
 
    We export the Datadog API key in our current shell in order to be able to call it at any time with `$DD_API_KEY`. 
 
-4. Go in the `/vagrant/workshop/exercise_2/` folder to start the exercise:
+4. Go in the `/vagrant/workshop/exercise_1/` folder to start the exercise:
 
-    `cd ~/vagrant/workshop/exercise_2/`
+    `cd /vagrant/workshop/exercise_1/`
 
 ## Trying the application
 
@@ -33,7 +33,7 @@ The whole application is managed with `docker-compose` in order to simplify its 
 
 1. Launch the first flask application: 
 
-    `docker-compose build && docker-compose up`
+    `docker-compose build && docker-compose up -d`
 
 2. Try it out with one of the following command:
 
@@ -44,7 +44,7 @@ The whole application is managed with `docker-compose` in order to simplify its 
   * `curl -X GET http://localhost:8080/think/?subject=music`
   * `curl -X GET http://localhost:8080/think/?subject=humankind`
   
-  Either test this in your vagrant box or on your computer directly. The `8080` port is binded between the vagrant host and guest. 
+  Either test this in your vagrant box or on your computer directly. The `8080` port is bound between the vagrant host and guest. 
   
   If curl is not available on your machine, try to access `http://localhost:8080/think/?subject=technology` in your favorite browser.
 
@@ -57,7 +57,7 @@ If not done already go in your Datadog application and [enable the Log-managemen
 
 Start by stopping and removing all current running containers: 
 
-    docker-compose stop & docker-compose rm
+    docker-compose stop & docker-compose rm -f
 
 Since we are working in a containerized environment, the Datadog agent should be run as a container alongside the other containers. All configuration should then happen only through environment variables, volumes and docker labels.[learn more on docker Datadog Agent setup in the documentation](https://docs.datadoghq.com/agent/basic_agent_usage/docker/).
 
@@ -72,15 +72,13 @@ datadog:
   volume:
     (...)
     - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
-    - /proc/mounts:/host/proc/mounts:ro
 ```
 
-| Configuration                                      | type         | Explanations |
-| :----                                              | :-----       | :-----       |
-| `DD_LOGS_ENABLED=true`                             | env variable |              |
-| `DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true`        | env variable |              |
-| `/opt/datadog-agent/run:/opt/datadog-agent/run:rw` | volume       |              |
-| `/proc/mounts:/host/proc/mounts:ro`                | volume       |              |
+| Configuration                                      | type         | Explanations                                    |
+| :----                                              | :-----       | :-----                                          |
+| `DD_LOGS_ENABLED=true`                             | env variable | Enable log collection                           |
+| `DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true`        | env variable | Enable log collection for all containers        |
+| `/opt/datadog-agent/run:/opt/datadog-agent/run:rw` | volume       | Used to store pointers on container current log |
 
 [Refer to the Datadog Agent log collection documentation to learn more](https://docs.datadoghq.com/logs/log_collection/docker/). 
 
@@ -89,6 +87,8 @@ Go in your Datadog application in [`Log -> Explorer`](https://app.datadoghq.com/
 ![Log Flow](/workshop/exercise_1/images/log_flow.png)
 
 ## Step 2: Exploring data in Datadog
+Install the Redis and NGINX integrations on the [Datadog integration page](https://app.datadoghq.com/account/settings).
+
 ### Metrics
 
 Thanks to the [Datadog auto-discovery feature](https://docs.datadoghq.com/agent/autodiscovery/), metrics are collected automatically from the Redis and NGINX containers plus Integrations dashboard have been created OOTB in your Datadog application:
@@ -120,7 +120,7 @@ Logs are collected from all your containers but there are several issue:
 
 **Those Logs give more context upon your system but don't show its overall state nor it's behavior**
 
-![log_not_parsed](/workshop/exercise_1/log_not_parsed.png)
+![log_not_parsed](/workshop/exercise_1/images/log_not_parsed.png)
 
 ## Step 2: Gathering better logs.
 
@@ -191,7 +191,7 @@ The `service` attribute values are defined upon what has been set-up in our appl
 Restart everything:
 
 ```
-docker-compose stop && docker-compose rm && docker-compose up
+docker-compose stop && docker-compose rm -f && docker-compose up -d
 ```
 
 Thanks to the `source` attribute [Integration pipelines](https://app.datadoghq.com/logs/pipelines) have been created within your Datadog application and are parsing your application logs from Redis and NGINX.
@@ -221,7 +221,7 @@ It just count the amount of hits and store the number in Redis itself
 Restart everything and watch what is happening:
 
 ```
-docker-compose stop && docker-compose rm && docker-compose up
+docker-compose stop && docker-compose rm -f && docker-compose up -d
 ```
 
 Logs flowing have automatically the right tags now, configuration is over.

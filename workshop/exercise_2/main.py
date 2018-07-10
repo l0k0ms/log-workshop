@@ -29,13 +29,13 @@ user = ['John', 'Jane', 'Bob', 'Alice']
 
 status_code = ['200','401', '403', '404', '500', '503', '504']
 
-
 #############
 # Variables #
 #############
 
-UDP_IP = "127.0.0.1"
-UDP_PORT = 4242
+TCP_IP = '127.0.0.1'
+TCP_PORT = 10514
+BUFFER_SIZE = 1024
 
 #############
 # Functions #
@@ -54,8 +54,12 @@ def write_text_log(filename):
 	+ ' user agent used was ' + random_value(user_agent) + '\n'
 	with open(filename, 'a') as f:
 			f.write(log )
-	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	sock.sendto(log +'\n', (UDP_IP, UDP_PORT))
+
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.connect((TCP_IP, TCP_PORT))
+	s.send(log + '\n')
+	data = s.recv(BUFFER_SIZE)
+	s.close()
 
 def write_json_log(filename):
 	now = datetime.datetime.now()
@@ -66,10 +70,10 @@ def write_json_log(filename):
 			"response_time": response_time, 
 			"severity": "{}" .format(random_value(severity)), 
 			"url": "{}" .format(random_value(url)), 
-			"user_name": "{}" .format(random_value(user)), 
+			"user": "{}" .format(random_value(user)), 
 			"message": "A user connected to a URL",
 			"status_code": "{}" .format(random_value(status_code)),
-			"user_agent_bis": "{}".format(random_value(user_agent))}
+			"user_agent": "{}".format(random_value(user_agent))}
 			f.write(json.dumps(log) +'\n')
 	
 		
@@ -77,7 +81,7 @@ def dummy():
 	print('Dummy script started\n')
 	print('text_log.log file path is /vagrant/workshop/exercise_2/text_log.log')
 	print('json_log.log file path is /vagrant/workshop/exercise_2/json_log.log')
-	print('UDP log are sent on the 4242 port through UDP')
+	print('TCP log are sent on the 10514 port through TCP')
 	while(1):
 		write_text_log('./text_log.log')
 		write_json_log('./json_log.log')

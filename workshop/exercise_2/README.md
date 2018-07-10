@@ -12,11 +12,11 @@ The OS distribution and version used for this exercise is `bento/ubuntu-16.04`.
 
 1. Start your vagrant VM:
   
-  `vagrant up`
+    `vagrant up`
 
 2. Connect to your Workshop vagrant box:
   
-  `vagrant ssh`
+    `vagrant ssh`
 
 3. Export your [Datadog API Key](https://app.datadoghq.com/account/settings#api):
 
@@ -26,11 +26,11 @@ The OS distribution and version used for this exercise is `bento/ubuntu-16.04`.
 
 4. Go in the `/vagrant/workshop/exercise_2/` folder to start the exercise:
 
-  `cd ~/vagrant/workshop/exercise_2/`
+    `cd ~/vagrant/workshop/exercise_2/`
 
 5. Launch the dummy script: 
 
-    `python main.py &`
+        `python main.py &`
 
 ## Installing the Agent
 
@@ -94,19 +94,17 @@ logs:
     sourcecategory: agent
     tags: workshop:exercise_2, type:datadog-agent
 
-  - type: udp
-    port: 4242
-    service: udp_log
+  - type: tcp
+    port: 10514
+    service: tcp_log
     source: dummy_app
     sourcecategory: custom
-    tags: workshop:exercise_2, type:udp_log
+    tags: workshop:exercise_2, type:tcp_log
 ```
 
 ![log configuration](/workshop/exercise_2/images/log_configuration.png)
-
-* Give access to the folder to the DD agent `sudo chown -R dd-agent:dd-agent /var/log/datadog`.
  
-* Restart your agent `sudo service datadog-agent restart`.
+* Restart your agent `sudo systemctl restart datadog-agent`.
 
 * Check if everything is running smoothly: `sudo datadog-agent status`.
 
@@ -163,7 +161,7 @@ into this log:
 
 1. [Create a  pipeline][7] to parse JSON log **ONLY** (Set-up the correct filter on the pipeline `service:json_log`)
 
-2. Use [attribute remappers][10] to remap  `user_agent_bis` on `httpuser_agent` and `url` on `http.url`.
+2. Use [attribute remappers][10] to remap `user_agent` on `http.user_agent` and `url` on `http.url` and `status_code` on `http.status_code`
 
 The final pipeline should look like this:
 
@@ -171,21 +169,41 @@ The final pipeline should look like this:
 
 and transform this log:
 
-```
-
+```json
+{  
+   "user_agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.1 Safari/605.1.15",
+   "response_time":9611,
+   "url":"http://my.website_2.com/path/number/2/?query=param_2&var=foo_2",
+   "status_code":"403",
+   "message":"A user connected to a URL",
+   "user":"Alice",
+   "my_date":"2018-07-10 21:44:27.891783",
+   "severity":"DEBUG"
+}
 ```
 
 into this log:
 
+```json
+{
+    "http": {
+        "status_code": 404,
+        "url": "http://my.website_1.com/path/number/3/?query=param_1&var=foo_2",
+        "user_agent": "Mozilla/5.0%2520(X11;%2520Linux%2520x86_64;%2520rv:60.0)%2520Gecko/20100101%2520Firefox/60.0",
+    },
+    "my_date": "2018-07-10 21:45:58.065181",
+    "response_time": 5874,
+    "severity": "CRITICAL",
+    "url": "http://my.website_1.com/path/number/3/?query=param_1&var=foo_2",
+    "user": "Alice"
+}
 ```
 
-```
+### TCP logs
 
-### UDP log
+1. Clone the Text log pipeline and renaming it into the TCP log.
 
-1. Clone the Text log pipeline and renaming it into the UDP log.
-
-2. Change the pipeline filter value to `service:udp_log` to apply this Pipeline only to UDP logs
+2. Change the pipeline filter value to `service:tcp_log` to apply this Pipeline only to TCP logs
 
 ### Main processing pipeline 
 The current pipelines should look like this:
