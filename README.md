@@ -1,8 +1,6 @@
 # log-workshop
 
-This workshop aims to demonstrate the Datadog Log-management solution. 
-First by showing how to include log-management in a larger troubleshooting logic, binding it with metrics and traces in order to reach 100% visibility upon your infrastructure. 
-Second by looking in depth on how Datadog features allow you to implement logging best practices within seconds, and so allows you to implement Technical Intelligence.
+This workshop aims to demonstrate the Datadog Log-management solution: first, by showing how to include log-management in larger troubleshooting logic and binding it with metrics and traces in order to reach 100% visibility upon your infrastructure; and second, by looking in depth at how Datadog features allow you to implement logging best practices within seconds, allowing you to implement Technical Intelligence.
 
 ## Setup
 
@@ -14,7 +12,7 @@ You must have the following tools for this workshop:
 * The [Datadog APM feature enabled][9]
 * The [Datadog Log-management feature enabled][8]
 
-Clone this repository on your local computer and you are ready to go !
+Clone this repository on your local computer and you are ready to go!
 
 ## Reaching 100% visibility with metrics traces and logs
 
