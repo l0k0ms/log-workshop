@@ -7,7 +7,7 @@ This workshop aims to demonstrate the Datadog Log-management solution: first, by
 You must have the following tools for this workshop:
 
 * [Vagrant][1]
-* [VirtualBox][]
+* [VirtualBox][11]
 * [A Datadog platform][2] and its [associated API key][3]
 * The [Datadog APM feature enabled][9]
 * The [Datadog Log-management feature enabled][8]
@@ -31,3 +31,4 @@ Go in [workshop/exercise_2](/workshop/exercise_2) and follow the `README.md` ins
 [8]: https://app.datadoghq.com/logs
 [9]: https://app.datadoghq.com/apm/
 [10]: https://www.virtualbox.org/wiki/Downloads
+[11]: https://www.virtualbox.org/
