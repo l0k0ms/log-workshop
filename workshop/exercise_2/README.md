@@ -1,12 +1,12 @@
 # Workshop Exercise 2: Implementing logging best practices
 
-The second exercise is made upon a dummy application that generates different logs with different formats. It logs them in different sources (files, TCP)
+The second exercise works with a dummy application that generates different logs with different formats. It logs them in different sources (files, TCP).
 
-If not done already, [enable the log-management product in your Datadog application][6].
+If it is not done already, [enable the log-management product in your Datadog application][6].
 
 ## Launch the script
 
-In order to perform this exercise we must spawn a vagrant VM, it allows us to work in a controlled environment, abstracting all potential OS related issue and making this work flow repeatable.
+In order to perform this exercise, we must spawn a vagrant VM. This allows us to work in a controlled environment, abstracting all potential OS related issues and making this work flow repeatable.
 
 The OS distribution and version used for this exercise is `bento/ubuntu-16.04`. 
 
@@ -36,7 +36,7 @@ The OS distribution and version used for this exercise is `bento/ubuntu-16.04`.
 
 ## Installing the Agent
 
-To start gathering logs from our system we can use any log-shipper, but in order to benefit from the advantages displayed in the exercise 1 of this workshop we strongly advise you to use the Datadog Agent. To get the Datadog agent:
+To start gathering logs from our system, we can use any log shipper, but in order to benefit from the advantages displayed in exercise 1 of this workshop, we strongly advise you to use the Datadog Agent. To get the Datadog agent:
 
 1. Connect to your [Datadog Application][2]
 2. Install the Datadog Agent on your machine:
@@ -45,7 +45,7 @@ To start gathering logs from our system we can use any log-shipper, but in order
     DD_API_KEY=$DD_API_KEY bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
     ```
 
-Once installed you should see this into your shell:
+Once installed, you should see this in your shell:
 
 ```
 Your Agent is running and functioning properly. It will continue to run in the
@@ -64,7 +64,7 @@ This means that the Datadog agent is up and running and is ready to be configure
 
 ## Gathering Data
 
-We have 3 types of log: **full text** | **JSON** | **TCP**, we need to configure our agent accordingly ([Log collection documentation][5])
+We have 3 types of log: **full text** | **JSON** | **TCP**. ]We need to configure our agent accordingly: ([Log collection documentation][5])
 
 To do:
 
@@ -76,7 +76,7 @@ To do:
 
     1. `sudo mkdir /etc/datadog-agent/conf.d/workshop.d`
     2. `sudo vim /etc/datadog-agent/conf.d/workshop.d/conf.yaml`
-    3. Copy/Past the following content inside the `conf.yaml` file
+    3. Copy/Paste the following content inside the `conf.yaml` file
 
     ```
     logs:
@@ -124,7 +124,7 @@ Go into your [log-explorer view][6] and check that your logs are here.
 
 ### Full text logs
 
-1. [Create a  pipeline][7] to parse full text log **ONLY** (Set-up the correct filter on the pipeline `service:text_log`)
+1. [Create a  pipeline][7] to parse full text logs **ONLY** (Set-up the correct filter on the pipeline `service:text_log`)
 
     ![text_pipeline](/workshop/exercise_2/images/text_pipeline.png)
 
@@ -136,7 +136,7 @@ Go into your [log-explorer view][6] and check that your logs are here.
 
     ![Text log parser](/workshop/exercise_2/images/text_log_grok_parser.png)
 
-3. Implement a status remapping on the main log status with [the log status remapper][9]
+3. Implement a status remapping the main log status with [the log status remapper][9]
 
     ![text_log_remapping_severity](/workshop/exercise_2/images/text_log_remapping_severity.png)
 
@@ -167,7 +167,7 @@ into this log:
 
 ### JSON log
 
-1. [Create a  pipeline][7] to parse JSON log **ONLY** (Set-up the correct filter on the pipeline `service:json_log`)
+1. [Create a  pipeline][7] to parse JSON logs **ONLY** (Set up the correct filter on the pipeline `service:json_log`)
 
 2. Use [attribute remappers][10] to remap:
     * `user_agent` on `http.user_agent` 
@@ -212,7 +212,7 @@ into this log:
 
 ### TCP logs
 
-1. Clone the Text log pipeline and renaming it into TCP log pipeline.
+1. Clone the Text log pipeline and rename it to TCP log pipeline.
 
 2. Change the pipeline filter value to `service:tcp_log` to apply this pipeline only to TCP logs.
 
@@ -221,7 +221,7 @@ The current pipelines should look like this:
 
 ![3_pipelines](/workshop/exercise_2/images/3_pipelines.png)
 
-Now that all the different source of logs have a unified format, let's create a main processing pipeline to enhance all our logs:
+Now that all the different sources of logs have a unified format, let's create a main processing pipeline to enhance all our logs:
 
 1. Create the pipeline:
     
@@ -231,11 +231,11 @@ Now that all the different source of logs have a unified format, let's create a 
     
     ![url parser](/workshop/exercise_2/images/url_parser.png)
 
-3. Parse the `http.user_agent` attribute with [User Agent Processor][12]
+3. Parse the `http.user_agent` attribute with the [User Agent Processor][12]
     
     ![user_agent parser](/workshop/exercise_2/images/user_agent_parser.png)
 
-4. Create an attribute categories on the status code [with the categories processor][13]
+4. Create attribute categories on the status code [with the categories processor][13]
 
     ![category processor](/workshop/exercise_2/images/category_processor.png)
 
@@ -245,37 +245,37 @@ The final pipeline should look like this:
 
 ## Facets
 
-Now that we have all our logs parsed and enhanced we can start adding our attributes as [facet][14].
+Now that we have all our logs parsed and enhanced we can start adding our attributes as [facets][14].
 
 **Note**: only new logs attributes are taken into account by the facets.
 
-Add the `user`, `duration` attributes as facet.
+Add the `user`, `duration` attributes as facets.
 
 1. Click on the attribute you want to define as a facet:
    
     ![creating facet](/workshop/exercise_2/images/creating_facet.png)
 
-2. Configure your Facet:
+2. Configure your facet:
     
     ![configuring facet](/workshop/exercise_2/images/configuring_facet.png)
 
-Facet can be used to filter, either on the string value or on a double/int range.
+Facets can be used to filter, either on a string value or on a double/int range.
 
 ## Search 
 
-Here are different search to try out:
+Here are different searches to try out:
 
 1. Search for all logs with `status_code` above 400
 
     `@http.status_code:>400`
 
-2. Find all log from the user `John`
+2. Find all logs from the user `John`
 
     `@user_name:"john"`
  
 ## Log Graph
 
-Looking at raw logs like this is useful, but if you want to make your log talk switching to [Log graphs][15] allows you to do some TI (Technical Intelligence) with them. TI is like BI, but instead it's on Log :)
+Looking at raw logs like this is useful, but if you want to make your log talk, switching to [Log graphs][15] allows you to do some TI (Technical Intelligence) with them. TI is like BI, but instead it's on Logs :)
 
 ![Log Graph](/workshop/exercise_2/images/log_graph.png)
 
@@ -287,8 +287,8 @@ Try to display:
 
 ## Monitor
 
-Let's monitor those data, enter a query and use it to define a monitor.
-We could monitor for instance the amount of `5xx` or `4xx` that are generated by our stack at any given moment.
+Let's monitor those data, enter a query, and use it to define a monitor.
+For instance, we could monitor the amount of `5xx` or `4xx` that are generated by our stack at any given moment.
 
 ![Log Monitor](/workshop/exercise_2/images/log_monitor.png)
 

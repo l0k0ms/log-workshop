@@ -1,10 +1,10 @@
 # Workshop Exercise 1: Reaching 100% visibility with metrics traces and logs
 
-This fist exercise is a simple Flask application composed by an NGINX, an API, a micro-service and a Redis. The Flask application is a fork from the [previous workshop of Vlad](https://github.com/vlad-mh/pyconuk-2017) on the APM distributed feature, allowing us to work with an already APM instrumented application in order to focus on the log collection and usage part.
+This first exercise is a simple Flask application composed with NGINX, an API, a micro-service and Redis. The Flask application is a fork from the [Vlad's previous workshop](https://github.com/vlad-mh/pyconuk-2017) on the APM distributed feature, allowing us to work with an already APM instrumented application in order to focus on the log collection and usage part.
 
 ## Installation
 
-In order to perform this exercise we must spawn a vagrant VM, it allows us to work in a controlled environment, abstracting all potential OS related issue and making this work flow repeatable.
+In order to perform this exercise, we must spawn a vagrant VM. This allows us to work in a controlled environment, abstracting all potential OS related issues and making this work flow repeatable.
 
 The OS distribution and version used for this exercise is `bento/ubuntu-16.04`. 
 
@@ -33,7 +33,7 @@ The OS distribution and version used for this exercise is `bento/ubuntu-16.04`.
 Let's start this exercise by launching the application and testing it.
 The whole application is managed with `docker-compose` in order to simplify its usage.
 
-1. Launch the first flask application: 
+1. Launch the first Flask application: 
 
     `docker-compose up --build -d`
 
@@ -53,7 +53,7 @@ The whole application is managed with `docker-compose` in order to simplify its 
 ## Step 1: Gathering logs.
 ### Installation 
 
-If not done already go in your Datadog application and [enable the Log-management feature](https://app.datadoghq.com/logs/).
+If not done already, go in your Datadog application and [enable the Log-management feature](https://app.datadoghq.com/logs/).
 
 ### Setup
 
@@ -61,9 +61,9 @@ Start by stopping and removing all current running containers:
 
     docker-compose stop & docker-compose rm -f
 
-Since we are working in a containerized environment, the Datadog agent should run as a container alongside the other containers. All configuration should then happen only through environment variables, volumes and docker labels.[learn more on docker Datadog Agent setup in the documentation](https://docs.datadoghq.com/agent/basic_agent_usage/docker/).
+Since we are working in a containerized environment, the Datadog Agent should run as a container alongside the other containers. All configuration should then happen only through environment variables, volumes, and docker labels. [Learn more about docker Datadog Agent setup in the documentation](https://docs.datadoghq.com/agent/basic_agent_usage/docker/).
 
-To start gathering the application logs add the following lines to the `docker-compose.yaml` file in this folder to run the agent as a container and start gathering some logs:
+To start gathering the application logs, add the following lines to the `docker-compose.yaml` file in this folder to run the Agent as a container and start gathering some logs:
 
 ```
 datadog:
@@ -94,13 +94,13 @@ Install the Redis and NGINX integrations on the [Datadog integration page](https
 
 ### Metrics
 
-Thanks to the [Datadog auto-discovery feature](https://docs.datadoghq.com/agent/autodiscovery/), metrics are collected automatically from the Redis and NGINX containers. OOTB Integrations dashboard have been created in your Datadog application:
+Thanks to the [Datadog auto-discovery feature](https://docs.datadoghq.com/agent/autodiscovery/), metrics are collected automatically from the Redis and NGINX containers. OOTB Integrations dashboards have been created in your Datadog application:
 
 * [Nginx Overview](https://app.datadoghq.com/screen/integration/21/nginx---overview)
 * [Nginx Metrics](https://app.datadoghq.com/dash/integration/20/nginx---metrics)
 * [Redis Overview](https://app.datadoghq.com/screen/integration/15/redis---overview)
 
-**Those dashboards give you a clear state of the running system but don't show its behavior nor why it's behaving this way.**
+**Those dashboards give you a clear state of the running system but don't show its overall state or why it's behaving this way.**
 
 ### Traces
 
@@ -110,39 +110,39 @@ Traces are collected for the following services:
 * [`thinker-api`](https://app.datadoghq.com/apm/service/thinker-api/flask.request)
 * [`thinker-microservice`](https://app.datadoghq.com/apm/service/thinker-microservice/aiohttp.request)
 
-The application was already instrumented to emit those traces, [refer to the Datadog documentation if you want to learn more on APM instrumentation](https://docs.datadoghq.com/tracing/)
+The application was already instrumented to emit those traces. [Refer to the Datadog documentation if you want to learn more on APM instrumentation](https://docs.datadoghq.com/tracing/)
 
-**Those traces describe your system behavior but don't show its overall state nor why it's behaving this way**
+**Those traces describe your system behavior but don't show its overall state or why it's behaving this way.**
 
 ### Logs 
 
-[Logs are collected](https://app.datadoghq.com/logs) from all your containers but there are several issue: 
+[Logs are collected](https://app.datadoghq.com/logs) from all your containers but there are some issues: 
 
 * Logs are not parsed.
-* Logs are not binded to the other data types that are metrics and traces.
+* Logs are not bound to the other data types that are metrics and traces.
 
-**Those Logs give more context upon your system but don't show its overall state nor it's behavior**
+**Those Logs give more context on your system but don't show its overall state or why it's behaving this way.**
 
 ![log_not_parsed](/workshop/exercise_1/images/log_not_parsed.png)
 
 ## Step 2: Gathering better logs.
 
-Logs are flowing in your Datadog application but they are not parsed nor are they linked to the other data type.
+Logs are flowing in your Datadog application but they are not parsed, nor are they linked to the other data type.
 
-In order to solve this issue we are going to use to reserved attribute:
+In order to solve this issue, we are going to use two reserved attributes:
 
 * `source`
 * `service`
 
 ### Integration pipelines 
 
-**The `source` attribute is key to enable integration pipeline**
+**The `source` attribute is key to enable the integration pipeline**
 
-Datadog have a range of [Log supported integration](https://docs.datadoghq.com/integrations/#log-collection). In order to enable Log integrations pipeline in datadog, pass the source name as a value for the `source` attribute with a docker label:
+Datadog has a range of [Log supported integration](https://docs.datadoghq.com/integrations/#log-collection). In order to enable the Log integrations pipeline in Datadog, pass the source name as a value for the `source` attribute with a docker label.
 
 Enhance your `docker-compose.yml` with the following labels:
 
-For Redis, according to [the Datadog-Redis documentation](https://docs.datadoghq.com/integrations/redisdb/) use the following labels:
+For Redis, according to [the Datadog Redis documentation](https://docs.datadoghq.com/integrations/redisdb/) use the following labels:
 
 ```
 redis:
@@ -151,7 +151,7 @@ redis:
     com.datadoghq.ad.logs: '[{"source": "redis", "service": "redis"}]'
 ```
 
-For NGINX, according to [the Datadog-NGINX documentation](https://docs.datadoghq.com/integrations/nginx/) use the following labels:
+For NGINX, according to [the Datadog NGINX documentation](https://docs.datadoghq.com/integrations/nginx/) use the following labels:
 
 ```
 nginx:
@@ -165,7 +165,7 @@ nginx:
 
 **The `service` attribute is key for binding metrics traces and logs**.
 
-Our application is already instrumented for APM. Let's add log tag to the containers `thinker-api` and `thinker-microservice` in order to be able to bind the traces and the log together.
+Our application is already instrumented for APM. Let's add log tags to the containers `thinker-api` and `thinker-microservice` in order to be able to bind the traces and the log together.
 
 Enhance the `docker-compose.yml` file with the following labels:
 
@@ -181,7 +181,7 @@ thinker:
     com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-microservice"}]'
 ```
 
-The `service` attribute values are defined upon what has been set-up in our applications code:
+The `service` attribute values are defined upon what has been set up in our applications code:
 
 * [For the `api` service](https://github.com/l0k0ms/log-workshop/blob/master/workshop/exercise_1/app/api.py#L16)
 * [For the `thinker` service](https://github.com/l0k0ms/log-workshop/blob/master/workshop/exercise_1/app/thinker.py#L73) 
@@ -194,8 +194,8 @@ Restart everything:
 docker-compose stop && docker-compose rm -f && docker-compose up -d
 ```
 
-Thanks to the `source` attribute [Integration pipelines](https://app.datadoghq.com/logs/pipelines) have been created within your Datadog application and are parsing your application logs from Redis and NGINX.
-If you want to learn more about log-parsing and what's the story behind pipeline feel free to refer to the [second exercise of this workshop][/workshop/exercise_2].
+Thanks to the `source` attribute, [Integration pipelines](https://app.datadoghq.com/logs/pipelines) have been created within your Datadog application and are parsing your application logs from Redis and NGINX.
+If you want to learn more about log parsing and what's the story behind pipelines, feel free to refer to the [second exercise of this workshop][/workshop/exercise_2].
 
 ![integration_pipelines](/workshop/exercise_1/images/integration_pipelines.png)
 
@@ -207,20 +207,20 @@ This section should be done after completing the [second exercise](/workshop/exe
 ## Adding new application logs
 Update the application with a new log and see what is happening
 
-In `thinker.py` in the `think()` function add a dummy log: 
+In `thinker.py`, in the `think()`, function add a dummy log: 
 
 ```
 redis_client.incr('hits')
 aiohttp_logger.info('Number of hits is {}' .format(redis_client.get('hits').decode('utf-8')))
 ```
 
-It just count the amount of hits and store the number in Redis itself
+It just counts the number of hits and stores the number in Redis itself.
 Restart everything and watch what is happening:
 
 ```
 docker-compose stop && docker-compose rm -f && docker-compose up -d
 ```
 
-Logs flowing have automatically the right tags now, configuration is over.
+Logs flowing automatically have the right tags now. Configuration is over.
 
-After completing the Exercise 2, parse this new log, add the `hits_number` as a facet, create a monitor on its derivative and then launch `stress_test.sh` 
+After completing Exercise 2, parse this new log, add the `hits_number` as a facet, create a monitor on its derivative, and then launch `stress_test.sh` 
