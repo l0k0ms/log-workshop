@@ -9,6 +9,7 @@ Second by looking in depth on how Datadog features allow you to implement loggin
 You must have the following tools for this workshop:
 
 * [Vagrant][1]
+* [VirtualBox][]
 * [A Datadog platform][2] and its [associated API key][3]
 * The [Datadog APM feature enabled][9]
 * The [Datadog Log-management feature enabled][8]
@@ -31,3 +32,4 @@ Go in [workshop/exercise_2](/workshop/exercise_2) and follow the `README.md` ins
 [7]: https://docs.datadoghq.com/logs/processing/
 [8]: https://app.datadoghq.com/logs
 [9]: https://app.datadoghq.com/apm/
+[10]: https://www.virtualbox.org/wiki/Downloads
