@@ -200,15 +200,12 @@ docker-compose stop && docker-compose rm -f && docker-compose up -d
 Thanks to the `source` attribute [Integration pipelines](https://app.datadoghq.com/logs/pipelines) have been created within your Datadog application and are parsing your application logs from Redis and NGINX.
 If you want to learn more about log-parsing and what's the story behind pipeline feel free to refer to the [second exercise of this workshop][/workshop/exercise_2].
 
-![integration_pipelines](/workshop/exercise_1/integration_pipelines.png)
+![integration_pipelines](/workshop/exercise_1/images/integration_pipelines.png)
 
-Thanks to the `service` attribute we are now able to switch from metrics to traces to logs with.
+Thanks to the `service` attribute we are now able to switch from metrics to traces to logs.
 
 ## Bonus - Enhancing our logs
 This section should be done after completing the [second exercise](/workshop/exercise_2) of this workshop.
-
-## Enhancing NGINX logs
-
 
 ## Adding new application logs
 Update the application with a new log and see what is happening

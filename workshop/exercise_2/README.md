@@ -10,6 +10,8 @@ In order to perform this exercise we must spawn a vagrant VM, it allows us to wo
 
 The OS distribution and version used for this exercise is `bento/ubuntu-16.04`. 
 
+0. Go inside the `log-workshop/` folder that you [downloaded from Github](https://github.com/l0k0ms/log-workshop).
+
 1. Start your vagrant VM:
   
     `vagrant up`
@@ -26,11 +28,11 @@ The OS distribution and version used for this exercise is `bento/ubuntu-16.04`.
 
 4. Go in the `/vagrant/workshop/exercise_2/` folder to start the exercise:
 
-        `cd ~/vagrant/workshop/exercise_2/`
+    `cd ~/vagrant/workshop/exercise_2/`
 
 5. Launch the dummy script: 
 
-        `python main.py &`
+    `python main.py &`
 
 ## Installing the Agent
 
