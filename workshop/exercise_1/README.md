@@ -148,7 +148,6 @@ For Redis, according to [the Datadog-Redis documentation](https://docs.datadoghq
 redis:
   (...)
   labels:
-    (...)
     com.datadoghq.ad.logs: '[{"source": "redis", "service": "redis"}]'
 ```
 
@@ -157,7 +156,7 @@ For NGINX, according to [the Datadog-NGINX documentation](https://docs.datadoghq
 ```
 nginx:
   (...)
-  label:
+  labels:
     (...)
     com.datadoghq.ad.logs: '[{"source": "nginx", "service": "nginx"}]'
 ```
@@ -174,13 +173,11 @@ Enhance the `docker-compose.yml` file with the following labels:
 api:
   (...)
   labels:
-    (...)
     com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-api"}]'
 
 thinker:
   (...)
   labels:
-    (...)
     com.datadoghq.ad.logs: '[{"source": "webapp", "service": "thinker-microservice"}]'
 ```
 
