@@ -1,6 +1,6 @@
 # Workshop Exercise 2: Implementing logging best practices
 
-The second exercise is made upon a dummy application that generates different logs with different formats. It logs them in different sources (file, UDP)
+The second exercise is made upon a dummy application that generates different logs with different formats. It logs them in different sources (files, TCP)
 
 If not done already, [enable the log-management product in your Datadog application][6].
 
@@ -20,13 +20,13 @@ The OS distribution and version used for this exercise is `bento/ubuntu-16.04`.
 
 3. Export your [Datadog API Key](https://app.datadoghq.com/account/settings#api):
 
-   `export DD_API_KEY=<DD_API_KEY>`
+    `export DD_API_KEY=<DD_API_KEY>`
 
-   We export the Datadog API key in our current shell in order to be able to call it at any time with `$DD_API_KEY`. 
+    We export the Datadog API key in our current shell in order to be able to call it at any time with `$DD_API_KEY`. 
 
 4. Go in the `/vagrant/workshop/exercise_2/` folder to start the exercise:
 
-    `cd ~/vagrant/workshop/exercise_2/`
+        `cd ~/vagrant/workshop/exercise_2/`
 
 5. Launch the dummy script: 
 
@@ -62,45 +62,51 @@ This means that the Datadog agent is up and running and is ready to be configure
 
 ## Gathering Data
 
-We have 3 types of log: **full text** | **JSON** | **UDP**, we need to configure our agent accordingly ([Log collection documentation][5])
+We have 3 types of log: **full text** | **JSON** | **TCP**, we need to configure our agent accordingly ([Log collection documentation][5])
 
 To do:
 
 * Enable log collection in `/etc/datadog-agent/datadog.yaml` by setting: `logs_enabled: true`
 
+    `sudo vim /etc/datadog-agent/datadog.yaml`
+
 * Create a file `workshop.d/conf.yaml` in the ` /etc/datadog-agent/conf.d/` folder with the following content:
 
-```
-logs:
+    1. `sudo mkdir /etc/datadog-agent/conf.d/workshop.d`
+    2. `sudo vim /etc/datadog-agent/conf.d/workshop.d/conf.yaml`
+    3. Copy/Past the following content inside the `conf.yaml` file
 
-  - type: file
-    path: /vagrant/workshop/exercise_2/text_log.log
-    service: text_log
-    source: dummy_app
-    sourcecategory: custom
-    tags: workshop:exercise_2, type:text_log
+    ```
+    logs:
 
-  - type: file
-    path: /vagrant/workshop/exercise_2/json_log.log
-    service: json_log
-    source: dummy_app
-    sourcecategory: custom
-    tags: workshop:exercise_2, type:json_log
+      - type: file
+        path: /vagrant/workshop/exercise_2/text_log.log
+        service: text_log
+        source: dummy_app
+        sourcecategory: custom
+        tags: workshop:exercise_2, type:text_log
 
-  - type: file
-    path: /var/log/datadog/*.log
-    service: datadog-agent
-    source: syslog
-    sourcecategory: agent
-    tags: workshop:exercise_2, type:datadog-agent
+      - type: file
+        path: /vagrant/workshop/exercise_2/json_log.log
+        service: json_log
+        source: dummy_app
+        sourcecategory: custom
+        tags: workshop:exercise_2, type:json_log
 
-  - type: tcp
-    port: 10514
-    service: tcp_log
-    source: dummy_app
-    sourcecategory: custom
-    tags: workshop:exercise_2, type:tcp_log
-```
+      - type: file
+        path: /var/log/datadog/*.log
+        service: datadog-agent
+        source: syslog
+        sourcecategory: agent
+        tags: workshop:exercise_2, type:datadog-agent
+
+      - type: tcp
+        port: 10514
+        service: tcp_log
+        source: dummy_app
+        sourcecategory: custom
+        tags: workshop:exercise_2, type:tcp_log
+    ```
 
 ![log configuration](/workshop/exercise_2/images/log_configuration.png)
  
@@ -128,7 +134,7 @@ Go into your [log-explorer view][6] and check that your logs are here.
 
     ![Text log parser](/workshop/exercise_2/images/text_log_grok_parser.png)
 
-3. Implement a severity remapping on the main log status with [the log status remapper][9]
+3. Implement a status remapping on the main log status with [the log status remapper][9]
 
     ![text_log_remapping_severity](/workshop/exercise_2/images/text_log_remapping_severity.png)
 
@@ -161,7 +167,10 @@ into this log:
 
 1. [Create a  pipeline][7] to parse JSON log **ONLY** (Set-up the correct filter on the pipeline `service:json_log`)
 
-2. Use [attribute remappers][10] to remap `user_agent` on `http.user_agent` and `url` on `http.url` and `status_code` on `http.status_code`
+2. Use [attribute remappers][10] to remap:
+    * `user_agent` on `http.user_agent` 
+    * `url` on `http.url`
+    * `status_code` on `http.status_code`
 
 The final pipeline should look like this:
 
@@ -201,9 +210,9 @@ into this log:
 
 ### TCP logs
 
-1. Clone the Text log pipeline and renaming it into the TCP log.
+1. Clone the Text log pipeline and renaming it into TCP log pipeline.
 
-2. Change the pipeline filter value to `service:tcp_log` to apply this Pipeline only to TCP logs
+2. Change the pipeline filter value to `service:tcp_log` to apply this pipeline only to TCP logs.
 
 ### Main processing pipeline 
 The current pipelines should look like this:
@@ -236,9 +245,9 @@ The final pipeline should look like this:
 
 Now that we have all our logs parsed and enhanced we can start adding our attributes as [facet][14].
 
-**Note**: that only new logs attributes are taken into account by the facets.
+**Note**: only new logs attributes are taken into account by the facets.
 
-Add the `user`, `duration`, and `http.url` attributes as facet.
+Add the `user`, `duration` attributes as facet.
 
 1. Click on the attribute you want to define as a facet:
    
@@ -276,7 +285,7 @@ Try to display:
 
 ## Monitor
 
-Let's monitor those data, enter a query and use it to define a monirot.
+Let's monitor those data, enter a query and use it to define a monitor.
 We could monitor for instance the amount of `5xx` or `4xx` that are generated by our stack at any given moment.
 
 ![Log Monitor](/workshop/exercise_2/images/log_monitor.png)

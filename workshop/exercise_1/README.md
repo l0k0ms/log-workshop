@@ -8,6 +8,8 @@ In order to perform this exercise we must spawn a vagrant VM, it allows us to wo
 
 The OS distribution and version used for this exercise is `bento/ubuntu-16.04`. 
 
+0. Go inside the `log-workshop/` folder that you [downloaded from Github](https://github.com/l0k0ms/log-workshop).
+
 1. Start your vagrant VM:
   
     `vagrant up`
@@ -18,9 +20,9 @@ The OS distribution and version used for this exercise is `bento/ubuntu-16.04`.
 
 3. Export your [Datadog API Key](https://app.datadoghq.com/account/settings#api):
 
-  `export DD_API_KEY=<DD_API_KEY>`
+    `export DD_API_KEY=<DD_API_KEY>`
 
-   We export the Datadog API key in our current shell in order to be able to call it at any time with `$DD_API_KEY`. 
+     We export the Datadog API key in our current shell in order to be able to call it at any time with `$DD_API_KEY`. 
 
 4. Go in the `/vagrant/workshop/exercise_1/` folder to start the exercise:
 
@@ -33,7 +35,7 @@ The whole application is managed with `docker-compose` in order to simplify its 
 
 1. Launch the first flask application: 
 
-    `docker-compose build && docker-compose up -d`
+    `docker-compose up --build -d`
 
 2. Try it out with one of the following command:
 
@@ -59,9 +61,9 @@ Start by stopping and removing all current running containers:
 
     docker-compose stop & docker-compose rm -f
 
-Since we are working in a containerized environment, the Datadog agent should be run as a container alongside the other containers. All configuration should then happen only through environment variables, volumes and docker labels.[learn more on docker Datadog Agent setup in the documentation](https://docs.datadoghq.com/agent/basic_agent_usage/docker/).
+Since we are working in a containerized environment, the Datadog agent should run as a container alongside the other containers. All configuration should then happen only through environment variables, volumes and docker labels.[learn more on docker Datadog Agent setup in the documentation](https://docs.datadoghq.com/agent/basic_agent_usage/docker/).
 
-To start gathering your logs add the following lines to the `docker-compose.yaml` file in this folder to run the agent as a container and start gathering some logs:
+To start gathering the application logs add the following lines to the `docker-compose.yaml` file in this folder to run the agent as a container and start gathering some logs:
 
 ```
 datadog:
@@ -87,11 +89,12 @@ Go in your Datadog application in [`Log -> Explorer`](https://app.datadoghq.com/
 ![Log Flow](/workshop/exercise_1/images/log_flow.png)
 
 ## Step 2: Exploring data in Datadog
+
 Install the Redis and NGINX integrations on the [Datadog integration page](https://app.datadoghq.com/account/settings).
 
 ### Metrics
 
-Thanks to the [Datadog auto-discovery feature](https://docs.datadoghq.com/agent/autodiscovery/), metrics are collected automatically from the Redis and NGINX containers plus Integrations dashboard have been created OOTB in your Datadog application:
+Thanks to the [Datadog auto-discovery feature](https://docs.datadoghq.com/agent/autodiscovery/), metrics are collected automatically from the Redis and NGINX containers. OOTB Integrations dashboard have been created in your Datadog application:
 
 * [Nginx Overview](https://app.datadoghq.com/screen/integration/21/nginx---overview)
 * [Nginx Metrics](https://app.datadoghq.com/dash/integration/20/nginx---metrics)
@@ -103,9 +106,9 @@ Thanks to the [Datadog auto-discovery feature](https://docs.datadoghq.com/agent/
 
 Traces are collected for the following services:
 
-* `redis`
-* `thinker-api`
-* `thinker-microservice` 
+* [`redis`](https://app.datadoghq.com/apm/service/redis/redis.command)
+* [`thinker-api`](https://app.datadoghq.com/apm/service/thinker-api/flask.request)
+* [`thinker-microservice`](https://app.datadoghq.com/apm/service/thinker-microservice/aiohttp.request)
 
 The application was already instrumented to emit those traces, [refer to the Datadog documentation if you want to learn more on APM instrumentation](https://docs.datadoghq.com/tracing/)
 
@@ -113,10 +116,10 @@ The application was already instrumented to emit those traces, [refer to the Dat
 
 ### Logs 
 
-Logs are collected from all your containers but there are several issue: 
+[Logs are collected](https://app.datadoghq.com/logs) from all your containers but there are several issue: 
 
 * Logs are not parsed.
-* Logs are not binded to the other medium that are metrics and traces.
+* Logs are not binded to the other data types that are metrics and traces.
 
 **Those Logs give more context upon your system but don't show its overall state nor it's behavior**
 
@@ -124,7 +127,7 @@ Logs are collected from all your containers but there are several issue:
 
 ## Step 2: Gathering better logs.
 
-Logs are flowing in your Datadog application but they are not parsed nor are they linked to the other medium.
+Logs are flowing in your Datadog application but they are not parsed nor are they linked to the other data type.
 
 In order to solve this issue we are going to use to reserved attribute:
 
