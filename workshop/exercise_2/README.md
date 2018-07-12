@@ -64,7 +64,7 @@ This means that the Datadog agent is up and running and is ready to be configure
 
 ## Gathering Data
 
-We have 3 types of log: **full text** | **JSON** | **TCP**. ]We need to configure our agent accordingly: ([Log collection documentation][5])
+We have 2 types of log: **full text** | **JSON** . ]We need to configure our agent accordingly: ([Log collection documentation][5])
 
 To do:
 
@@ -101,13 +101,6 @@ To do:
         source: syslog
         sourcecategory: agent
         tags: workshop:exercise_2, type:datadog-agent
-
-      - type: tcp
-        port: 10514
-        service: tcp_log
-        source: dummy_app
-        sourcecategory: custom
-        tags: workshop:exercise_2, type:tcp_log
     ```
 
 ![log configuration](/workshop/exercise_2/images/log_configuration.png)
@@ -209,12 +202,6 @@ into this log:
     "user": "Alice"
 }
 ```
-
-### TCP logs
-
-1. Clone the Text log pipeline and rename it to TCP log pipeline.
-
-2. Change the pipeline filter value to `service:tcp_log` to apply this pipeline only to TCP logs.
 
 ### Main processing pipeline 
 The current pipelines should look like this:

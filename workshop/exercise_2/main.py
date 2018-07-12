@@ -30,14 +30,6 @@ user = ['John', 'Jane', 'Bob', 'Alice']
 status_code = ['200','401', '403', '404', '500', '503', '504']
 
 #############
-# Variables #
-#############
-
-TCP_IP = '127.0.0.1'
-TCP_PORT = 10514
-BUFFER_SIZE = 1024
-
-#############
 # Functions #
 #############
 
@@ -55,11 +47,6 @@ def write_text_log(filename):
 	with open(filename, 'a') as f:
 			f.write(log )
 
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect((TCP_IP, TCP_PORT))
-	s.send(log + '\n')
-	data = s.recv(BUFFER_SIZE)
-	s.close()
 
 def write_json_log(filename):
 	now = datetime.datetime.now()
@@ -81,7 +68,6 @@ def dummy():
 	print('Dummy script started\n')
 	print('text_log.log file path is /vagrant/workshop/exercise_2/text_log.log')
 	print('json_log.log file path is /vagrant/workshop/exercise_2/json_log.log')
-	print('TCP log are sent on the 10514 port through TCP')
 	while(1):
 		write_text_log('./text_log.log')
 		write_json_log('./json_log.log')
