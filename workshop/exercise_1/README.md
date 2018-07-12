@@ -59,7 +59,7 @@ If not done already, go in your Datadog application and [enable the Log-manageme
 
 Start by stopping and removing all current running containers: 
 
-    docker-compose stop & docker-compose rm -f
+    docker-compose stop && docker-compose rm -f
 
 Since we are working in a containerized environment, the Datadog Agent should run as a container alongside the other containers. All configuration should then happen only through environment variables, volumes, and docker labels. [Learn more about docker Datadog Agent setup in the documentation](https://docs.datadoghq.com/agent/basic_agent_usage/docker/).
 
